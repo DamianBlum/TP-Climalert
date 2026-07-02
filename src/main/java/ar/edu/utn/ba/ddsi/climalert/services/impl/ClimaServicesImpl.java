@@ -2,7 +2,7 @@ package ar.edu.utn.ba.ddsi.climalert.services.impl;
 
 import ar.edu.utn.ba.ddsi.climalert.dto.TiempoApiResponse;
 import ar.edu.utn.ba.ddsi.climalert.models.entities.Clima;
-import ar.edu.utn.ba.ddsi.climalert.models.entities.DisparadorAlerta;
+import ar.edu.utn.ba.ddsi.climalert.alerts.DisparadorAlerta;
 import ar.edu.utn.ba.ddsi.climalert.repositories.ClimaRepository;
 import ar.edu.utn.ba.ddsi.climalert.services.ClimaServices;
 

@@ -1,5 +1,6 @@
-package ar.edu.utn.ba.ddsi.climalert.models.entities;
+package ar.edu.utn.ba.ddsi.climalert.alerts;
 
+import ar.edu.utn.ba.ddsi.climalert.models.entities.Clima;
 import ar.edu.utn.ba.ddsi.climalert.services.EmailService;
 import org.springframework.stereotype.Component;
 
