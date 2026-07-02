@@ -52,8 +52,6 @@ public class ClimaServicesImpl implements ClimaServices {
 
 
                 climaRepository.agregarClima(climaActual);
-                // TODO: Aquí deberías guardar 'climaActual' localmente para el registro histórico
-                // (por ejemplo, en una base de datos o una lista en memoria) como pide el punto 1.
             } else {
                 System.err.println("======> [ALERTA] La API respondió vacío o con estructura inesperada.");
             }
@@ -67,10 +65,10 @@ public class ClimaServicesImpl implements ClimaServices {
     public void chequeoAlertas() {
         climaRepository.conseguirUltimoClima().ifPresent(climaActual -> {
             // Esto solo se ejecuta si el Optional tiene un clima adentro
-            System.out.println("Clima ultimo a evaluar - Temperatura: " + climaActual.getTemperatura() + "°C, Humedad: " + climaActual.getHumedad() + "%");
+
 
             for (DisparadorAlerta alerta : alertas) {
-                System.out.println("Hola, soy una alerta");
+
                 alerta.ejecutar(climaActual);
             }
         });

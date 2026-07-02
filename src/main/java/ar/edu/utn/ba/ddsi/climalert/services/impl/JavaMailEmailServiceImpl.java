@@ -19,8 +19,6 @@ public class JavaMailEmailServiceImpl implements EmailService {
     public void enviarCorreo(String destinatario, String asunto,String cuerpo) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
-
-            // El 'true' indica que va a ser un mensaje multipart (permite adjuntos o HTML)
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(destinatario);

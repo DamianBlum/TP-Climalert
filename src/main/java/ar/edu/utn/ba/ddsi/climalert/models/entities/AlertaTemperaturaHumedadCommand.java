@@ -12,13 +12,12 @@ public class AlertaTemperaturaHumedadCommand implements DisparadorAlerta {
     @Override
     public void ejecutar(Clima clima) {
         // Regla específica de la primera iteración
-        if (clima.getTemperatura() > 5 && clima.getHumedad() > 30) {
+        if (clima.getTemperatura() > 35 && clima.getHumedad() > 30) {
             String detalle = "¡Alerta Meteorológica! Temp: " + clima.getTemperatura() + "°C, Humedad: " + clima.getHumedad() + "%";
 
-            emailService.enviarCorreo("dblumbellini@frba.utn.edu.ar", "Probando", detalle);
-            /*emailService.enviarCorreo("admin@clima.com", "Alerta Crítica", detalle);
+            emailService.enviarCorreo("admin@clima.com", "Alerta Crítica", detalle);
             emailService.enviarCorreo("emergencias@clima.com", "Alerta Crítica", detalle);
-            emailService.enviarCorreo("meteorologia@clima.com", "Alerta Crítica", detalle);*/
+            emailService.enviarCorreo("meteorologia@clima.com", "Alerta Crítica", detalle);
         }
     }
 }
