@@ -13,7 +13,7 @@ public class AlertaTemperaturaHumedadCommand implements DisparadorAlerta {
     @Override
     public void ejecutar(Clima clima) {
         // Regla específica de la primera iteración
-        if (clima.getTemperatura() > 35 && clima.getHumedad() > 30) {
+        if (clima.getTemperatura() > 35 && clima.getHumedad() > 60) {
             String detalle = "¡Alerta Meteorológica! Temp: " + clima.getTemperatura() + "°C, Humedad: " + clima.getHumedad() + "%";
 
             emailService.enviarCorreo("admin@clima.com", "Alerta Crítica", detalle);
