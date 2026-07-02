@@ -1,25 +1,78 @@
 package ar.edu.utn.ba.ddsi.climalert.services.impl;
 
+import ar.edu.utn.ba.ddsi.climalert.dto.TiempoApiResponse;
+import ar.edu.utn.ba.ddsi.climalert.models.entities.Clima;
+import ar.edu.utn.ba.ddsi.climalert.models.entities.DisparadorAlerta;
+import ar.edu.utn.ba.ddsi.climalert.repositories.ClimaRepository;
 import ar.edu.utn.ba.ddsi.climalert.services.ClimaServices;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Service
 public class ClimaServicesImpl implements ClimaServices {
-    public RestTemplate  restTemplate;
+    private final RestTemplate  restTemplate;
+    private final ClimaRepository climaRepository;
+    private final List<DisparadorAlerta> alertas; // Spring inyecta todos los comandos automáticamente
+    @Value("${weatherapi.key}")
+    private String apiKey;
 
-    public ClimaServicesImpl( RestTemplate restTemplate) {
+    @Value("${weatherapi.location:CABA}")
+    private String localidad;
+
+    @Value("${weatherapi.base-url:http://api.weatherapi.com/v1}")
+    private String baseUrl;
+
+    public ClimaServicesImpl( RestTemplate restTemplate, ClimaRepository climaRepository,  List<DisparadorAlerta> alertas) {
         this.restTemplate = restTemplate;
+        this.climaRepository = climaRepository;
+        this.alertas = alertas;
     }
 
 
     @Override
     public void obtenerClima() {
-        restTemplate.getForObject("http://localhost:8080/ClimaServices", ClimaServices.class);
+        System.out.println("======> [SERVICIO] Entré a obtenerClima(). Evaluando llamada externa...");
+        String url = String.format("%s/current.json?key=%s&q=%s", baseUrl, apiKey, localidad);
+
+        try {
+            // Hacemos el GET mapeando la respuesta a nuestro DTO
+            TiempoApiResponse response = restTemplate.getForObject(url, TiempoApiResponse.class);
+
+            if (response != null && response.getCurrent() != null) {
+                double temperaturaActual = response.getCurrent().getTempC();
+                double humedadActual = response.getCurrent().getHumidity();
+
+                Clima climaActual = new Clima(temperaturaActual, humedadActual);
+
+                System.out.println("Clima obtenido - Temperatura: " + climaActual.getTemperatura() + "°C, Humedad: " + climaActual.getHumedad() + "%");
+
+
+                climaRepository.agregarClima(climaActual);
+                // TODO: Aquí deberías guardar 'climaActual' localmente para el registro histórico
+                // (por ejemplo, en una base de datos o una lista en memoria) como pide el punto 1.
+            } else {
+                System.err.println("======> [ALERTA] La API respondió vacío o con estructura inesperada.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al obtener el clima: " + e.getMessage());
+        }
+
     }
 
     @Override
     public void chequeoAlertas() {
+        climaRepository.conseguirUltimoClima().ifPresent(climaActual -> {
+            // Esto solo se ejecuta si el Optional tiene un clima adentro
+            System.out.println("Clima ultimo a evaluar - Temperatura: " + climaActual.getTemperatura() + "°C, Humedad: " + climaActual.getHumedad() + "%");
 
+            for (DisparadorAlerta alerta : alertas) {
+                System.out.println("Hola, soy una alerta");
+                alerta.ejecutar(climaActual);
+            }
+        });
     }
 }

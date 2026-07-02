@@ -1,3 +1,19 @@
 spring:
   application:
     name: climalert
+  mail:
+    host: sandbox.smtp.mailtrap.io # Cambialo por tu servidor SMTP
+    port: 2525
+    username: "6f3a3f35b8380b"
+    password: "af7d75ae6373e2"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+weatherapi:
+  key: "1f0239dd576545dd8f405054260207"
+  location: "Buenos Aires"
+  base-url: "http://api.weatherapi.com/v1"
+

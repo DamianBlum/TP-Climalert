@@ -2,7 +2,9 @@ package ar.edu.utn.ba.ddsi.climalert.scheduling;
 
 import ar.edu.utn.ba.ddsi.climalert.services.ClimaServices;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ClimaScheduler {
     private final ClimaServices climaServices;
 
@@ -12,7 +14,7 @@ public class ClimaScheduler {
 
     }
     // Cada 5 minutos
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void obtenerClima() {
         climaServices.obtenerClima();
     }
